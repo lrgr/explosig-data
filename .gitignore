@@ -1,0 +1,5 @@
+.snakemake/
+__pycache__/
+explosig_data.egg-info
+dist/
+build/
