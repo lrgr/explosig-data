@@ -17,10 +17,7 @@ pip install explosig-data
 
 ```python
 >>> import explosig_data as ed
->>> import explosig_data.constants as edc
-
->>> # Download data
->>> ed.download(edc.CONSORTIA.ICGC)
+>>> # coming soon
 ```
 
 
