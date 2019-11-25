@@ -1,8 +1,5 @@
 import os
 import sys
-import snakemake as snakemake_api
-import tempfile
-import yaml
 import numpy as np
 import pandas as pd
 import logging
@@ -10,28 +7,13 @@ import logging
 from .constants import *
 from .i_o import get_logger, get_df_drop_message
 from .categories import *
+from .genomes import get_human_genomes_dict
+from .genes import get_human_genes_dict
 
 def _setup():
-    print("Setting up explosig-data")
-
     os.makedirs(os.path.expanduser(os.path.join('~', '.explosig')), exist_ok=True)
+    os.makedirs(os.path.expanduser(os.path.join('~', '.explosig', 'genes')), exist_ok=True)
     os.makedirs(os.path.expanduser(os.path.join('~', '.explosig', 'genomes')), exist_ok=True)
-
-    
-    # Download human genome files
-    config = {
-        "output": {
-            "hg19": os.path.expanduser(os.path.join('~', '.explosig', "genomes", "hg19.fa")),
-            "hg38": os.path.expanduser(os.path.join('~', '.explosig', "genomes", "hg38.fa"))
-        }
-    }
-
-    # Since snakemake() function can only handle "flat" dicts using the direct config= parameter,
-    # need to write the config dict to a temporary file and instead pass in to configfile=
-    with tempfile.NamedTemporaryFile(mode='w') as temp:
-        yaml.dump(config, temp, default_flow_style=False)
-        snakefile = os.path.join(os.path.dirname(__file__), 'snakefiles', 'genomes', 'human.smk')
-        snakemake_api.snakemake(snakefile=snakefile, configfiles=[temp.name])
 
 _setup()
 
@@ -222,10 +204,10 @@ def add_mutation_category_column(df, category_functions):
     return df
 
 # Add a column specifying whether the mutation is on the transcribed or non-transcribed strand.
-def add_transcription_strand_column(df, transcripts):
+def add_transcription_strand_column(df, genes):
     def determine_tstrand(row):
         try:
-            tstrand = transcripts[row[COLNAME.ASSEMBLY.value]].strand(
+            tstrand = genes[row[COLNAME.ASSEMBLY.value]].strand(
                 chr_name=row[COLNAME.CHR.value], 
                 pos=row[COLNAME.POS_START.value], 
                 gstrand=row[COLNAME.GSTRAND.value]
@@ -238,7 +220,7 @@ def add_transcription_strand_column(df, transcripts):
 
     return df
 
-def extend_ssm_df(ssm_df, category_functions=None, genomes=None, transcripts=None):
+def extend_ssm_df(ssm_df, category_functions=None, genomes=None, genes=None):
     if category_functions == None:
         category_functions = {
             'INDEL_Alexandrov2018_83': (INDEL_Alexandrov2018_83_category_name, [MUT_TYPE_VAL.INS.value, MUT_TYPE_VAL.DEL.value]),
@@ -247,19 +229,13 @@ def extend_ssm_df(ssm_df, category_functions=None, genomes=None, transcripts=Non
         }
     
     if genomes == None:
-        genomes = {
-            ASSEMBLY_VAL.HG19.value: None,
-            ASSEMBLY_VAL.HG38.value: None
-        }
+        genomes = get_human_genomes_dict()
     
-    if transcripts == None:
-        transcripts = {
-            ASSEMBLY_VAL.HG19.value: None,
-            ASSEMBLY_VAL.HG38.value: None
-        }
+    if genes == None:
+        genes = get_human_genes_dict()
     
     ssm_df = add_flanking_columns(ssm_df, genomes)
-    ssm_df = add_transcription_strand_column(ssm_df, transcripts)
+    ssm_df = add_transcription_strand_column(ssm_df, genes)
     ssm_df = add_mutation_category_column(ssm_df, category_functions)
 
     #logging.info('Adding distance to previous mutation column')
