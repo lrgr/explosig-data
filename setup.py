@@ -24,6 +24,7 @@ setuptools.setup(
         'numpy>=1.17.0',
         'snakemake>=5.3',
         'biopython>=1.75',
-        'twobitreader>=3.1'
+        'twobitreader>=3.1',
+        'tqdm>=4.39.0'
     ],
 )

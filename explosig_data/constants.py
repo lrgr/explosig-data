@@ -30,6 +30,14 @@ class COLNAME(Enum):
     GENE_SYMBOL = 'Gene Symbol'
     ASSEMBLY = 'Assembly Version'
 
+    # Supplemental column names
+    FPRIME = "5' Flanking Bases"
+    TPRIME = "3' Flanking Bases"
+    TSTRAND = 'Transcriptional Strand'
+    MUT_DIST = 'Distance to Previous Mutation'
+    NEAREST_MUT = 'Distance to Nearest Mutation'
+    MUT_DIST_ROLLING_MEAN = 'Rolling Mean of 6 Mutation Distances'
+
 
 SSM_COLUMNS = [
     COLNAME.PATIENT.value, 

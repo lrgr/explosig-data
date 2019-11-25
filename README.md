@@ -17,7 +17,7 @@ pip install explosig-data
 
 ```python
 >>> import explosig_data as ed
->>> # coming soon
+>>> ed.extend_ssm_df(ed.convert_to_ssm_df_from_ICGC_file('~/Desktop/simple_somatic_mutation.open.ALL-US.tsv.gz'))
 ```
 
 

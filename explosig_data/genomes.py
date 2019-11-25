@@ -47,12 +47,12 @@ class FastaGenome(Genome):
         logging.debug('Loading genome complete')
         
     def seq(self, chr_name, start, end, gstrand):
-        assert (gstrand == GSTRAND_VALS.PLUS.value) # TODO update position when GSTRAND is not plus
+        assert (gstrand == GSTRAND_VAL.PLUS.value) # TODO update position when GSTRAND is not plus
         return str(self.genome[chr_name][start:end].seq)
 
     
     def base(self, chr_name, pos, gstrand):
-        assert (gstrand == GSTRAND_VALS.PLUS.value) # TODO update position when GSTRAND is not plus
+        assert (gstrand == GSTRAND_VAL.PLUS.value) # TODO update position when GSTRAND is not plus
         return str(self.genome[chr_name][pos-1])
 
 
@@ -64,11 +64,11 @@ class TwoBitGenome(Genome):
         logging.info('Loading genome complete')
         
     def seq(self, chr_name, start, end, gstrand):
-        assert (gstrand == GSTRAND_VALS.PLUS.value) # TODO update position when GSTRAND is not plus
+        assert (gstrand == GSTRAND_VAL.PLUS.value) # TODO update position when GSTRAND is not plus
         return self.genome[chr_name][start:end].upper()
     
     def base(self, chr_name, pos, gstrand):
-        assert (gstrand == GSTRAND_VALS.PLUS.value) # TODO update position when GSTRAND is not plus
+        assert (gstrand == GSTRAND_VAL.PLUS.value) # TODO update position when GSTRAND is not plus
         return str(self.genome[chr_name][pos-1]).upper()
 
 def download_human_genomes():
