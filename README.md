@@ -20,7 +20,7 @@ pip install explosig-data
 
 >>> # With chaining
 >>> container = (ed
-        .standardize_ICGC_ssm_file('path/to/simple_somatic_mutation.open.ALL-US.tsv')
+        .standardize_ICGC_ssm_file('path/to/ssm.tsv')
         .extend_df()
         .to_counts_df('SBS_96', ed.categories.SBS_96_category_list())
     )
@@ -28,9 +28,15 @@ pip install explosig-data
 
 
 >>> # Without chaining
->>> ssm_df = ed.standardize_ICGC_ssm_file('path/to/simple_somatic_mutation.open.ALL-US.tsv', wrap=False)
+>>> ssm_df = ed.standardize_ICGC_ssm_file('path/to/ssm.tsv', wrap=False)
+>>> # or
+>>> ssm_df = ed.standardize_TCGA_maf_file('path/to/maf.tsv', wrap=False)
 >>> extended_df = ed.extend_ssm_df(ssm_df)
->>> counts_df = ed.counts_from_extended_ssm_df(extended_df, category_colname='SBS_96', category_values=ed.categories.SBS_96_category_list())
+>>> counts_df = ed.counts_from_extended_ssm_df(
+        extended_df, 
+        category_colname='SBS_96', 
+        category_values=ed.categories.SBS_96_category_list()
+    )
 ```
 
 

@@ -42,7 +42,7 @@ col_renames = {
     "Hugo_Symbol": COLNAME.GENE_SYMBOL.value
 }
 
-def standardize_TCGA_maf_file(input_maf_file, input_sample_file, wrap=True,
+def standardize_TCGA_maf_file(input_maf_file, wrap=True,
                                         cancer_type='unknown', provenance='unknown', cohort='unknown', 
                                         col_dtypes=col_dtypes, col_renames=col_renames,
                                         console_verbosity=logging.DEBUG):
@@ -51,9 +51,7 @@ def standardize_TCGA_maf_file(input_maf_file, input_sample_file, wrap=True,
     Parameters
     ----------
     input_maf_file : `str`
-        Path to the TCGA PanCanAtlas MAF file.
-    input_sample_file : `str`
-        Path to the TCGA PanCanAtlas samples file.
+        Path to a TCGA PanCanAtlas MAF file.
     wrap : `bool`, optional
         Whether to wrap the return value for chaining, by default `True`
     cancer_type : `str`, optional
@@ -87,30 +85,22 @@ def standardize_TCGA_maf_file(input_maf_file, input_sample_file, wrap=True,
     # set patient to be first 12 characters of sample
     maf_df[COLNAME.PATIENT.value] = [barcode[0:12] for barcode in maf_df[COLNAME.SAMPLE.value]]
     
-    # download the sample-type mapping
-    sample_df = pd.read_excel(io=input_sample_file, sheet_name="ExtraEndpoints")
-    sample_df = sample_df.rename(columns={"bcr_patient_barcode": COLNAME.PATIENT.value, "type": COLNAME.CANCER_TYPE.value})
-    sample_df = sample_df[[COLNAME.PATIENT.value, COLNAME.CANCER_TYPE.value]]
-    maf_df = sample_df.merge(maf_df, on=COLNAME.PATIENT.value)
     # remove mutations where Filter column contains 'nonpreferredpair' or 'oxog' or 'StrandBias'
     maf_df = maf_df.loc[~maf_df["FILTER"].str.contains('StrandBias|oxog|nonpreferredpair')]
 
     logging.debug("After removing mutations where FILTER column contains 'nonpreferredpair' or 'oxog' or 'StrandBias', df has %d rows" % maf_df.shape[0])
 
-    # Restrict to current cancer type
-    maf_df = maf_df.loc[maf_df[COLNAME.CANCER_TYPE.value] == cancer_type]
-    logging.debug("After filtering by cancer type, df has %d rows" % maf_df.shape[0])
-
     # set cohort and provenance
-    maf_df[COHORT] = cancer_type
-    maf_df[PROVENANCE] = provenance
+    maf_df[COLNAME.COHORT.value] = cohort
+    maf_df[COLNAME.PROVENANCE.value] = provenance
+    maf_df[COLNAME.CANCER_TYPE.value] = cancer_type
 
     # TODO: update this indel logic
     def convert_mut_type(row):
         # required because len(NaN) returns a TypeError "object of type 'float' has no len()"
         if row.isnull()[[COLNAME.REF.value, COLNAME.VAR.value]].any():
             return NAN_VAL
-        if row[COLNAME.MUT_TYPE] == 'SNP':
+        if row[COLNAME.MUT_TYPE.value] == 'SNP':
             return MUT_TYPE_VAL.SBS.value
         elif len(row[COLNAME.REF.value]) == 2 and len(row[COLNAME.VAR.value]) == 2:
             return MUT_TYPE_VAL.DBS.value
