@@ -17,7 +17,20 @@ pip install explosig-data
 
 ```python
 >>> import explosig_data as ed
->>> ed.extend_ssm_df(ed.convert_to_ssm_df_from_ICGC_file('~/Desktop/simple_somatic_mutation.open.ALL-US.tsv.gz'))
+
+>>> # With chaining
+>>> container = (ed
+        .standardize_ICGC_ssm_file('path/to/simple_somatic_mutation.open.ALL-US.tsv')
+        .extend_df()
+        .to_counts_df('SBS_96', ed.categories.SBS_96_category_list())
+    )
+>>> counts_df = container.counts_dfs['SBS_96']
+
+
+>>> # Without chaining
+>>> ssm_df = ed.standardize_ICGC_ssm_file('path/to/simple_somatic_mutation.open.ALL-US.tsv', wrap=False)
+>>> extended_df = ed.extend_ssm_df(ssm_df)
+>>> counts_df = ed.counts_from_extended_ssm_df(extended_df, category_colname='SBS_96', category_values=ed.categories.SBS_96_category_list())
 ```
 
 

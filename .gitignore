@@ -3,3 +3,5 @@ __pycache__/
 explosig_data.egg-info
 dist/
 build/
+raw/
+.DS_Store
