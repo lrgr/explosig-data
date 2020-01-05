@@ -1,0 +1,16 @@
+language: python
+python:
+  - "3.6"
+install:
+  - python -m pip install --upgrade setuptools wheel
+script:
+  - python setup.py sdist bdist_wheel
+  - pip install .
+before_deploy:
+  - pip install pdoc3
+  - pdoc --html --config show_source_code=False --config sort_identifiers=False --config git_link_template="'https://github.com/lrgr/explosig-data/blob/{commit}/{path}#L{start_line}-L{end_line}'" --force --output-dir docs explosig_data
+deploy:
+  - provider: pages
+    skip-cleanup: true
+    github-token: $github_token
+    local-dir: docs/explosig_data
