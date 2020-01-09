@@ -74,8 +74,8 @@ class TwoBitGenome(Genome):
 def download_human_genomes():
     config = {
         "output": {
-            "hg19": os.path.expanduser(os.path.join('~', '.explosig', "genomes", "hg19.fa")),
-            "hg38": os.path.expanduser(os.path.join('~', '.explosig', "genomes", "hg38.fa"))
+            "hg19": os.path.join(EXPLOSIG_DATA_DIR, "genomes", "hg19.fa"),
+            "hg38": os.path.join(EXPLOSIG_DATA_DIR, "genomes", "hg38.fa")
         }
     }
 
@@ -89,6 +89,6 @@ def download_human_genomes():
 def get_human_genomes_dict():
     download_human_genomes()
     return {
-        ASSEMBLY_VAL.HG19.value: FastaGenome(os.path.expanduser(os.path.join('~', '.explosig', "genomes", "hg19.fa"))),
-        ASSEMBLY_VAL.HG38.value: FastaGenome(os.path.expanduser(os.path.join('~', '.explosig', "genomes", "hg38.fa")))
+        ASSEMBLY_VAL.HG19.value: FastaGenome(os.path.join(EXPLOSIG_DATA_DIR, "genomes", "hg19.fa")),
+        ASSEMBLY_VAL.HG38.value: FastaGenome(os.path.join(EXPLOSIG_DATA_DIR, "genomes", "hg38.fa"))
     }

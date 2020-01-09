@@ -80,7 +80,7 @@ def extend_ssm_df(ssm_df, category_functions=None, genomes=None, genes=None,
     
     Returns
     -------
-    [type]
+    pd.DataFrame
         [description]
     """
 

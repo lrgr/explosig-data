@@ -13,30 +13,48 @@ Helpers for processing mutation data into standard formats originally developed 
 pip install explosig-data
 ```
 
-### Example Usage
+### Example 
+
+With raw SSM/MAF file from ICGC or TCGA:
 
 ```python
 >>> import explosig_data as ed
 
->>> # With chaining
->>> container = (ed
-        .standardize_ICGC_ssm_file('path/to/ssm.tsv')
-        .extend_df()
-        .to_counts_df('SBS_96', ed.categories.SBS_96_category_list())
-    )
->>> counts_df = container.counts_dfs['SBS_96']
+>>> # Step 1: Process into the ExploSig "standard format":
+>>> data_container = ed.standardize_ICGC_ssm_file('path/to/ssm.tsv') # if ICGC
+>>> data_container = ed.standardize_TCGA_maf_file('path/to/ssm.tsv') # if TCGA
+
+>>> # Step 2: Process further
+>>> data_container.extend_df().to_counts_df('SBS_96', ed.categories.SBS_96_category_list()))
+
+>>> # Step 3: Use the processed dataframe of interest.
+>>> counts_df = data_container.counts_dfs['SBS_96']
 
 
->>> # Without chaining
->>> ssm_df = ed.standardize_ICGC_ssm_file('path/to/ssm.tsv', wrap=False)
->>> # or
->>> ssm_df = ed.standardize_TCGA_maf_file('path/to/maf.tsv', wrap=False)
+>>> # Alternatively, use without the chaining API:
+>>> ssm_df = ed.standardize_ICGC_ssm_file('path/to/ssm.tsv', wrap=False) # if ICGC
+>>> ssm_df = ed.standardize_TCGA_maf_file('path/to/maf.tsv', wrap=False) # if TCGA
 >>> extended_df = ed.extend_ssm_df(ssm_df)
 >>> counts_df = ed.counts_from_extended_ssm_df(
         extended_df, 
         category_colname='SBS_96', 
         category_values=ed.categories.SBS_96_category_list()
     )
+```
+
+With data already in the ExploSig "standard format":
+
+```python
+>>> import explosig_data as ed
+>>> import pandas as pd
+
+>>> # Step 0: Load the data into a dataframe, for example by reading from a TSV file.
+>>> ssm_df = pd.read_csv('path/to/standard.tsv', sep='\t')
+
+>>> # Step 1: Wrap the dataframe using the container class to allow use of the chainable functions.
+>>> data_container = ed.SimpleSomaticMutationContainer(ssm_df)
+
+>>> # Now see step 2 above (or the alternative steps above).
 ```
 
 

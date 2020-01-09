@@ -91,8 +91,8 @@ class GeneLookup:
 def download_human_genes():
     config = {
         "output": {
-            "hg19": os.path.expanduser(os.path.join('~', '.explosig', "genes", "refFlat19.txt")),
-            "hg38": os.path.expanduser(os.path.join('~', '.explosig', "genes", "refFlat38.txt"))
+            "hg19": os.path.join(EXPLOSIG_DATA_DIR, "genes", "refFlat19.txt"),
+            "hg38": os.path.join(EXPLOSIG_DATA_DIR, "genes", "refFlat38.txt")
         }
     }
 
@@ -106,6 +106,6 @@ def download_human_genes():
 def get_human_genes_dict():
     download_human_genes()
     return {
-        ASSEMBLY_VAL.HG19.value: GeneLookup(os.path.expanduser(os.path.join('~', '.explosig', "genes", "refFlat19.txt"))),
-        ASSEMBLY_VAL.HG38.value: GeneLookup(os.path.expanduser(os.path.join('~', '.explosig', "genes", "refFlat38.txt")))
+        ASSEMBLY_VAL.HG19.value: GeneLookup(os.path.join(EXPLOSIG_DATA_DIR, "genes", "refFlat19.txt")),
+        ASSEMBLY_VAL.HG38.value: GeneLookup(os.path.join(EXPLOSIG_DATA_DIR, "genes", "refFlat38.txt"))
     }

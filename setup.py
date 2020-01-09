@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="explosig-data",
-    version="0.0.1",
+    version="0.0.2",
     author="Leiserson Research Group",
     description="Process mutation data into standard formats originally developed for the ExploSig family of tools",
     long_description=long_description,

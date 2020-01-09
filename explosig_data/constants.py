@@ -1,4 +1,7 @@
+import os
 from enum import Enum
+
+EXPLOSIG_DATA_DIR = os.path.expanduser(os.path.join('~', '.explosig'))
 
 BASES       = [ 'A', 'C', 'G', 'T' ]
 CHROMOSOMES = list(map(str, list(range(1, 23)))) + ['X', 'Y']
