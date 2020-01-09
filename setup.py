@@ -1,3 +1,4 @@
+import os
 import setuptools
 
 with open("README.md", "r") as fh:
@@ -5,13 +6,19 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="explosig-data",
-    version="0.0.2",
+    version="0.0.3",
     author="Leiserson Research Group",
     description="Process mutation data into standard formats originally developed for the ExploSig family of tools",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/lrgr/explosig-data",
     packages=setuptools.find_packages(),
+    package_data={
+        'explosig_data': [
+            os.path.join('snakefiles', 'genes', 'human.smk'),
+            os.path.join('snakefiles', 'genomes', 'human.smk')
+        ],
+    },
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
