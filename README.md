@@ -25,7 +25,7 @@ With raw SSM/MAF file from ICGC or TCGA:
 >>> data_container = ed.standardize_TCGA_maf_file('path/to/ssm.tsv') # if TCGA
 
 >>> # Step 2: Process further
->>> data_container.extend_df().to_counts_df('SBS_96', ed.categories.SBS_96_category_list()))
+>>> data_container.extend_df().to_counts_df('SBS_96', ed.categories.SBS_96_category_list())
 
 >>> # Step 3: Use the processed dataframe of interest.
 >>> counts_df = data_container.counts_dfs['SBS_96']
