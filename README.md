@@ -27,7 +27,9 @@ With raw SSM/MAF file from ICGC or TCGA:
 >>> # Step 2: Process further
 >>> data_container.extend_df().to_counts_df('SBS_96', ed.categories.SBS_96_category_list())
 
->>> # Step 3: Use the processed dataframe of interest.
+>>> # Step 3: Access any processed dataframe of interest:
+>>> ssm_df = data_container.ssm_df
+>>> extended_df = data_container.extended_df
 >>> counts_df = data_container.counts_dfs['SBS_96']
 
 
