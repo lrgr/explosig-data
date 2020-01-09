@@ -22,7 +22,7 @@ With raw SSM/MAF file from ICGC or TCGA:
 
 >>> # Step 1: Process into the ExploSig "standard format":
 >>> data_container = ed.standardize_ICGC_ssm_file('path/to/ssm.tsv') # if ICGC
->>> data_container = ed.standardize_TCGA_maf_file('path/to/ssm.tsv') # if TCGA
+>>> data_container = ed.standardize_TCGA_maf_file('path/to/maf.tsv') # if TCGA
 
 >>> # Step 2: Process further
 >>> data_container.extend_df().to_counts_df('SBS_96', ed.categories.SBS_96_category_list())
