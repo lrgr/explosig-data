@@ -81,7 +81,7 @@ def extend_ssm_df(ssm_df, category_functions=None, genomes=None, genes=None,
     Returns
     -------
     pd.DataFrame
-        [description]
+        Mutation dataframe in the extended format.
     """
 
     get_logger(console_verbosity=console_verbosity)
