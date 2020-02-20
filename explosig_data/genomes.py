@@ -5,10 +5,7 @@ from Bio import SeqIO
 from Bio.Seq import reverse_complement
 import twobitreader
 
-import snakemake as snakemake_api
-import tempfile
-import yaml
-
+from .utils import run_snakemake_with_config
 from .constants import *
 
 class Genome:
@@ -79,12 +76,8 @@ def download_human_genomes():
         }
     }
 
-    # Since snakemake() function can only handle "flat" dicts using the direct config= parameter,
-    # need to write the config dict to a temporary file and instead pass in to configfile=
-    with tempfile.NamedTemporaryFile(mode='w') as temp:
-        yaml.dump(config, temp, default_flow_style=False)
-        snakefile = os.path.join(os.path.dirname(__file__), 'snakefiles', 'genomes', 'human.smk')
-        snakemake_api.snakemake(snakefile=snakefile, configfiles=[temp.name])
+    snakefile = os.path.join(os.path.dirname(__file__), 'snakefiles', 'genomes', 'human.smk')
+    run_snakemake_with_config(snakefile, config)
 
 def get_human_genomes_dict():
     download_human_genomes()

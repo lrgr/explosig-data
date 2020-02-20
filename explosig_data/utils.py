@@ -1,6 +1,11 @@
 import pandas as pd
 import logging
 
+import os
+import snakemake as snakemake_api
+import tempfile
+import yaml
+
 from .constants import *
 from .i_o import get_logger, get_df_drop_message
 
@@ -58,3 +63,14 @@ def clean_ssm_df(df):
     return df[SSM_COLUMNS]
 
 
+def run_snakemake_with_config(snakefile_path, config):
+    # Since snakemake() function can only handle "flat" dicts using the direct config= parameter,
+    # need to write the config dict to a temporary file and instead pass in to configfile=
+    try:
+        f = tempfile.NamedTemporaryFile(mode='w', delete=False)
+        yaml.dump(config, f, default_flow_style=False)
+        snakemake_api.snakemake(snakefile=snakefile_path, configfiles=[f.name])
+        f.close()
+    finally:
+        os.unlink(f.name)        
+    
